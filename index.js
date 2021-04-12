@@ -5,19 +5,19 @@ const spec = require("./spec/swagger.json");
 // Import utils
 const utils = require("./utils");
 
-const getGlossaryTerms = glossary => {
+const getGlossaryTerms = async (glossary) => {
   // Iterate over the glossary terms
-  return glossary.terms.map(term => term.title);
+  return glossary.terms.map((term) => term.title);
 };
 
-const getSpecPathTerms = spec => {
+const getSpecPathTerms = async (spec) => {
   // Get terms in the path
   const endpoints = spec.paths;
   const endpointsArr = Object.keys(endpoints);
   if (Array.isArray(endpointsArr)) {
     return [].concat.apply(
       [],
-      endpointsArr.map(endpoint =>
+      endpointsArr.map((endpoint) =>
         utils.removeEmptyStringsFromArray(endpoint.split("/"))
       )
     );
@@ -26,7 +26,7 @@ const getSpecPathTerms = spec => {
   }
 };
 
-const getSpecParamTerms = spec => {
+const getSpecParamTerms = async (spec) => {
   let paramTerms = [];
   const endpoints = spec.paths;
   // An array of endpoint paths as string
@@ -34,24 +34,18 @@ const getSpecParamTerms = spec => {
   // Null check the array
   if (Array.isArray(endpointsArr)) {
     // Loop through each endpoint
-    endpointsArr.forEach(endpoint => {
+    endpointsArr.forEach((endpoint) => {
       // Extract the number of HTTP methods from the endpoint
       const httpMethodsArr = Object.keys(endpoints[endpoint]);
       // For each HTTP method
-      httpMethodsArr.forEach(httpMethod => {
+      httpMethodsArr.forEach((httpMethod) => {
         // Null check the parameters array
-        console.log(endpoints[endpoint][httpMethod].parameters);
-        // if (Array.isArray(endpoints[endpoint][httpMethod].parameters)) {
-          const paramTerms = endpoints[endpoint][httpMethod].parameters.map(
-            param => param.name
-          )
-          paramTerms.push(paramTerms);
-        // } else {
-        //   console.log(
-        //     "Error: DOGSHIT The following data is not of type 'Array'.",
-        //     endpoints[endpoint][httpMethod].parameters
-        //   );
-        // }
+        if (Array.isArray(endpoints[endpoint][httpMethod].parameters)) {
+          const newParamTerms = endpoints[endpoint][httpMethod].parameters.map(
+            (param) => param.name
+          );
+          paramTerms.push(...newParamTerms);
+        }
       });
       // for (index in httpMethodsArr) {
       //   console.log(httpMethodsArr[index], "Index");
@@ -62,6 +56,7 @@ const getSpecParamTerms = spec => {
       //   }
       // }
     });
+    return paramTerms;
   } else {
     console.log(
       "Error: The following data is not of type 'Array'.",
@@ -70,13 +65,37 @@ const getSpecParamTerms = spec => {
   }
 };
 
-// Create an array of glossary terms
-const glossaryTermsArray = getGlossaryTerms(glossary);
-// console.log(glossaryTermsArray);
+const getMatchingTerms = async (glossaryTerms, ...specTerms) => {
+  let combinedSpecTerms = [];
+  let matchingTerms = [];
+  specTerms.forEach((termArr) => combinedSpecTerms.push(...termArr));
+  console.log(combinedSpecTerms, "SPEC TERMS");
+  combinedSpecTerms.forEach((term) => {
+    if (glossaryTerms.indexOf(term) !== -1) {
+      matchingTerms.push(glossaryTerms[glossaryTerms.indexOf(term)]);
+    }
+  });
+  return matchingTerms;
+};
 
-// Create an array of spec terms
-const specPathTerms = getSpecPathTerms(spec);
-// console.log(specPathTerms);
+const start = async () => {
+  // Create an array of glossary terms
+  const glossaryTermsArray = await getGlossaryTerms(glossary);
+  console.log(glossaryTermsArray);
 
-const specParamTerms = getSpecParamTerms(spec);
-console.log(specParamTerms);
+  // Create an array of spec terms
+  const specPathTerms = await getSpecPathTerms(spec);
+  // console.log(specPathTerms);
+
+  const specParamTerms = await getSpecParamTerms(spec);
+  // console.log(specParamTerms);
+
+  const matchingTerms = await getMatchingTerms(
+    glossaryTermsArray,
+    specPathTerms,
+    specParamTerms
+  );
+  console.log(matchingTerms, "Matching Terms");
+};
+
+start();
