@@ -1,0 +1,2300 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "DynaMed",
+    "description": "MedsAPI DynaMed provides endpoints to search and retrieve current and accurate evidence-based content. The documentation on this site covers all supported functionality of the MedsAPI suite of APIs. Any fields or parameters not represented by the documentation are unsupported and subject to change. Additional optional query parameters and fields in the response could be added in the future as a non breaking change. Any other change that could break the contract would be considered in a future version.",
+    "contact": {
+      "name": "EBSCO Information Services",
+      "url": "https://connect.ebsco.com/"
+    },
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Token",
+      "description": "DynaMed Token API"
+    },
+    {
+      "name": "Search",
+      "description": "DynaMed Search API"
+    },
+    {
+      "name": "Articles",
+      "description": "DynaMed Articles API"
+    },
+    {
+      "name": "Publication Types",
+      "description": "DynaMed Publication Types API"
+    },
+    {
+      "name": "Categories",
+      "description": "DynaMed Medical Specialties API"
+    },
+    {
+      "name": "User",
+      "description": "DynaMed User API"
+    },
+    {
+      "name": "DMX",
+      "description": "DynaMedex API"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://ebscois-live.apigee.net/medsapi-dynamed/v1"
+    }
+  ],
+  "paths": {
+    "/token": {
+      "servers": [
+        {
+          "url": "https://ebscois-live.apigee.net/medsapi-auth/v1",
+          "description": "MedsAPI token endpoint"
+        }
+      ],
+      "post": {
+        "summary": "Get an authorization token",
+        "tags": [
+          "Token"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "refresh_token_expires_in": {
+                      "type": "string",
+                      "example": "0",
+                      "description": "The number of seconds remaining before the refresh token will expire.  The lifespan of refresh tokens is usually larger than Access tokens. The exact duration depends on the type of Refresh Tokens issued. The different types explained below in the document."
+                    },
+                    "product": {
+                      "type": "string",
+                      "example": "dynamed",
+                      "description": "The type of token issued"
+                    },
+                    "organization_name": {
+                      "type": "string",
+                      "example": "ebscois",
+                      "description": "The issuer of the token"
+                    },
+                    "developer.email": {
+                      "type": "string",
+                      "example": "msmith@mycompany.com",
+                      "description": "Name of the owener of the token"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "example": "BearerToken",
+                      "description": "Always set to be a bearer token"
+                    },
+                    "issued_at": {
+                      "type": "string",
+                      "example": "1593011837412",
+                      "description": "Epoch time when the token was issued"
+                    },
+                    "client_id": {
+                      "type": "string",
+                      "example": "{client_id}",
+                      "description": "Client Id that the token can be used by"
+                    },
+                    "access_token": {
+                      "type": "string",
+                      "example": "{actual bearer token to use}",
+                      "description": "Bearer token"
+                    },
+                    "application_name": {
+                      "type": "string",
+                      "example": "{id}",
+                      "description": "Id of the application that is registered for this token"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "example": "admin:rw",
+                      "description": "Authorization scope"
+                    },
+                    "expires_in": {
+                      "type": "string",
+                      "example": "14399",
+                      "description": "Seconds until this token has expired"
+                    },
+                    "refresh_count": {
+                      "type": "string",
+                      "example": "0",
+                      "description": "When this token can be refreshed automatically"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "approved",
+                      "description": "Indicates that the token has been approved"
+                    }
+                  },
+                  "required": [
+                    "refresh_token_expires_in",
+                    "product",
+                    "organization_name",
+                    "developer.email",
+                    "token_type",
+                    "issued_at",
+                    "client_id",
+                    "access_token",
+                    "application_name",
+                    "scope",
+                    "expires_in",
+                    "refresh_count",
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none was provided."
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access to this resource."
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching this request."
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested HTTP method."
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media type."
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media type in this request."
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within the given time."
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post-token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "example": "client_credentials",
+                    "description": "Must be set to client_credentials"
+                  },
+                  "product": {
+                    "type": "string",
+                    "example": "dynamed",
+                    "description": "Must be set to dynamed"
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "example": "{client_id}",
+                    "description": "The client_id to use will be provided by EBSCO"
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "example": "{client secret}",
+                    "description": "This will be provided by EBSCO"
+                  }
+                }
+              },
+              "examples": {
+                "Example Body": {
+                  "value": {
+                    "grant_type": "client_credentials",
+                    "product": "dynamed",
+                    "client_id": "{client id}",
+                    "client_secret": "{client secret}"
+                  }
+                }
+              }
+            },
+            "application/javascript": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": "{\n  \"grant_type\": \"client_credentials\",\n  \"product\": \"dynamed\",\n  \"client_id\": \"client_id\",\n  \"client_secret\": \"client secret\"\n}\n"
+        },
+        "parameters": [],
+        "description": "The authentication endpoint for getting a token, used in all other DynaMed APIs."
+      }
+    },
+    "/trusted-app-token": {
+      "get": {
+        "summary": "Get a JWT token to authenticate EBSCO users.",
+        "tags": [
+          "DMX"
+        ],
+        "description": "Builds a JWT Token for a trusted app to authenticate EBSCO users.",
+        "operationId": "getTokensUsingGET",
+        "parameters": [
+          {
+            "name": "x-eis-selected-location",
+            "in": "header",
+            "description": "Header parameter containing selected profile number to ensure the correct profile is used when a user is affiliated to multiple institutions.",
+            "example": 123456,
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tokenConsumer",
+            "in": "query",
+            "description": "The consumer of token being generated, e.g., mmx",
+            "required": true,
+            "example": "mmx",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "expirationInSeconds",
+            "in": "query",
+            "description": "Token expiration time in seconds.",
+            "required": false,
+            "example": 600,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - returns existing token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "JWT token",
+                      "example": "ey1234567890..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested HTTP method."
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media type."
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media type in this request."
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within the given time."
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Error-Response",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Standardized reason phrase for this status code",
+                      "example": "Error Name"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Details about the error",
+                      "example": "Error Description"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/publishers/{publisherId}/documents/{documentId}": {
+      "get": {
+        "summary": "Topic metadata for the external ID",
+        "tags": [
+          "DMX"
+        ],
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Unique identifier for this resource",
+                      "example": "1234"
+                    },
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rel": {
+                            "type": "string",
+                            "example": "self",
+                            "description": "Relation type of the associated link"
+                          },
+                          "href": {
+                            "type": "string",
+                            "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/publishers/mmx/documents/t123456",
+                            "description": "Absolute URL pointing to the resource"
+                          }
+                        },
+                        "description": "Hypermedia links related to this resource."
+                      }
+                    },
+                    "article": {
+                      "type": "object",
+                      "description": "Article related to this resource",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Unique identifier for this resource",
+                          "example": "t123456"
+                        },
+                        "productFamily": {
+                          "type": "string",
+                          "description": "Product family for this resource",
+                          "example": "nahp"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "description": "Unique slug assigned to this resource",
+                          "example": "/management/heart-failure-alternative-treatments"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "Display format for this resource's title",
+                          "example": "Heart Failure Alternative Treatments"
+                        },
+                        "pubType": {
+                          "type": "object",
+                          "description": "Publication type for this resource",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Unique identifier for this resource",
+                              "example": "drug"
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "Display format for this resource's title",
+                              "example": "Drug Monograph"
+                            }
+                          }
+                        },
+                        "links": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "rel": {
+                                "type": "string",
+                                "example": "self",
+                                "description": "Relation type of the associated link"
+                              },
+                              "href": {
+                                "type": "string",
+                                "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/t123456",
+                                "description": "Absolute URL pointing to the resource"
+                              }
+                            },
+                            "description": "Hypermedia links related to this resource."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none was provided."
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access to this resource."
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching this request."
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested HTTP method."
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media type."
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media type in this request."
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within the given time."
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Error-Response",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Standardized reason phrase for this status code",
+                      "example": "Error Name"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Details about the error",
+                      "example": "Error Description"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "topic-metadata",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "mmx"
+            },
+            "in": "path",
+            "name": "publisherId",
+            "description": "Unique identifier for the publisher of this content",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "1234"
+            },
+            "in": "path",
+            "name": "documentId",
+            "description": "Unique identifier for this content used by the publisher",
+            "required": true
+          }
+        ],
+        "description": "Endpoint for retrieving article metadata by the unique ID assigned by the publisher"
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "operationId": "get-search",
+        "summary": "Get content matching one or more query terms",
+        "description": "The Search endpoint returns items matching the caller's query with\nsummary information. Aggregations are included for all publication types that\nhave been specified.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Word or phrase to search.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "initiatedBy",
+            "description": "Origination of the request, passing this parameter will override the default initiatedBy value for both the response and the transaction logs.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "autocomplete",
+                "autocorrect-override-link",
+                "didyoumean-link",
+                "typed-in",
+                "voice-to-text"
+              ]
+            }
+          },
+          {
+            "name": "queryLanguage",
+            "in": "query",
+            "description": "Two letter language code to translate the query from.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pubTypeId",
+            "in": "query",
+            "description": "Comma separated publication types to return. These values are\ndiscovered through the ''medsapi-dynamed/v1/pubtypes'' endpoint.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Next page of results to start from. Each page contains 10 items.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "Used for paginated search result.Returned in the first page of\nresults.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/search_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching\nthis request.",
+            "content": {}
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested\nHTTP method.",
+            "content": {}
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media\ntype.",
+            "content": {}
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media\ntype in this request.",
+            "content": {}
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within\nthe given time.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with\nthe server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    },
+    "/search/suggestions": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "operationId": "get-search-suggestion",
+        "summary": "Get titles and/or terms as suggestions matching the supplied query",
+        "description": "The Search Suggestions endpoint returns suggestions matching the\ncaller's query with summary information. Aggregations are included for all\npublication types that have been specified.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "String of characters to search for suggestions.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "suggestionType",
+            "in": "query",
+            "description": "A comma separated list of supported ('title' and 'term') suggestion types.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxItemsPerSuggestionType ",
+            "in": "query",
+            "description": "The maximum number of items to return for each suggestion type, defaults to 10",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/search_suggestions"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching\nthis request.",
+            "content": {}
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested\nHTTP method.",
+            "content": {}
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media\ntype.",
+            "content": {}
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media\ntype in this request.",
+            "content": {}
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within\nthe given time.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with\nthe server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    },
+    "/articles/{articleId}": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "operationId": "get-article",
+        "summary": "Get an article by ID",
+        "description": "The Articles endpoint returns the article for a provided ID.",
+        "parameters": [
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article ID (e.g., `t116814`). ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MedsAPI Article",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/article"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching\nthis request.",
+            "content": {}
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested\nHTTP method.",
+            "content": {}
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media\ntype.",
+            "content": {}
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media\ntype in this request.",
+            "content": {}
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within\nthe given time.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with\nthe server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    },
+    "/pubtypes": {
+      "get": {
+        "tags": [
+          "Publication Types"
+        ],
+        "summary": "Get resource classification for the content",
+        "description": "The Pubtypes endpoint returns a list of publication types which\nare used in conjunction with the search endpoint to perform a search query.",
+        "operationId": "pubtypesUsingGET",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/pubtypes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching\nthis request.",
+            "content": {}
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested\nHTTP method.",
+            "content": {}
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media\ntype.",
+            "content": {}
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media\ntype in this request.",
+            "content": {}
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within\nthe given time.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with\nthe server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get a paginated list of categories available for DynaMed content",
+        "description": "The Categories endpoint returns a paginated list of categories\navailable for DynaMed content.",
+        "operationId": "get-categories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/categories"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching\nthis request.",
+            "content": {}
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested\nHTTP method.",
+            "content": {}
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media\ntype.",
+            "content": {}
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media\ntype in this request.",
+            "content": {}
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within\nthe given time.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with\nthe server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    },
+    "/categories/{categoriesId}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get a category matching the ID provided",
+        "description": "The Categories by ID endpoint returns the category matching the\nID provided.",
+        "operationId": "get-categories-ID",
+        "parameters": [
+          {
+            "name": "categoriesId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/categoriesById"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching\nthis request.",
+            "content": {}
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested\nHTTP method.",
+            "content": {}
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media\ntype.",
+            "content": {}
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media\ntype in this request.",
+            "content": {}
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within\nthe given time.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with\nthe server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    },
+    "/user/detailed-claims": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Endpoint provides ability to get a list of previously claimed credits.",
+        "description": "Endpoint returns the list of claimed credits for user: credit type, submission date, certificate id and the associated sections.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "startDate",
+            "description": "Start Date of Date Range, format is YYYY-MM-DD",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "endDate",
+            "description": "End Date of Date Range, format is YYYY-MM-DD",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Next page of items to return.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Maximum number of items to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "operationId": "getDetailedClaimsUsingGET",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/detailedClaims"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Required property is missing or contains an illegal value"
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none\nwas provided.",
+            "content": {}
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access\nto this resource.",
+            "content": {}
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "search_response": {
+        "type": "object",
+        "properties": {
+          "_metadata": {
+            "required": [
+              "aggregations",
+              "initiatedBy",
+              "links",
+              "page",
+              "pageSize",
+              "pageToken",
+              "presentedAs",
+              "queryUsed",
+              "searchTime",
+              "totalItems",
+              "totalPages"
+            ],
+            "type": "object",
+            "properties": {
+              "initiatedBy": {
+                "type": "string",
+                "description": "One of: typed-in, paging or didyoumean-probe",
+                "example": "typed-in"
+              },
+              "presentedAs": {
+                "type": "string",
+                "description": "Format of response",
+                "example": "result-list"
+              },
+              "pageToken": {
+                "type": "string",
+                "description": "Must use for continuing the search when paging",
+                "example": "id:rsid:31a98130-31ff-4a8d-a64c-88cfab477892"
+              },
+              "searchTime": {
+                "type": "number",
+                "description": "Time in ms to execute search",
+                "example": 134
+              },
+              "totalItems": {
+                "type": "number",
+                "example": 2289
+              },
+              "queryUsed": {
+                "type": "string",
+                "description": "Term used by the search engine",
+                "example": "heart"
+              },
+              "page": {
+                "type": "number",
+                "description": "Start of next page of items to return",
+                "example": 11
+              },
+              "pageSize": {
+                "type": "number",
+                "example": 10
+              },
+              "totalPages": {
+                "type": "number",
+                "example": 229
+              },
+              "aggregations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "description": "Indicates how many and what publication types each\nsearch match would fall into.",
+                      "example": "pubTypeId"
+                    },
+                    "counts": {
+                      "required": [
+                        "condition",
+                        "drug"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "condition": {
+                          "type": "number",
+                          "example": 1147
+                        },
+                        "drug": {
+                          "type": "number",
+                          "example": 1142
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "request": {
+                "required": [
+                  "pubTypeIds",
+                  "query"
+                ],
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Term(s) that were specified, in the original language\nnot corrected for typos",
+                    "example": "heart"
+                  },
+                  "pubTypeIds": {
+                    "type": "array",
+                    "example": [
+                      "condition",
+                      "drug"
+                    ],
+                    "items": {
+                      "type": "string",
+                      "description": "list available at  /medsapi-dynamed/v1/pubtypes."
+                    }
+                  }
+                },
+                "description": "Contains all of the query parameters exactly as specified\nby the caller."
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "rel": {
+                      "type": "string",
+                      "example": "self"
+                    },
+                    "href": {
+                      "type": "string",
+                      "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/search?query=heart&pubTypeId=condition&pubTypeId=drug"
+                    }
+                  },
+                  "description": "Hypermedia links related to this resource."
+                }
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "description": "Format for all but image results. See Models section below\nfor image item details",
+            "items": {
+              "$ref": "#/components/schemas/non-image-item"
+            }
+          }
+        },
+        "description": "Search results have 2 forms for the items.  This section describes\nthe response for all but image items.  See the Search API supplemental documentation\nfor details on the items."
+      },
+      "non-image-item": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "T114087"
+          },
+          "toc": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Overview and Recommendations"
+                },
+                "anchor": {
+                  "type": "string",
+                  "example": "GUID-5250DF0A-CBA8-416F-B438-11F7BBE324AF"
+                }
+              }
+            }
+          },
+          "title": {
+            "type": "string",
+            "example": "Carcinoid Heart Disease"
+          },
+          "description": {
+            "type": "string",
+            "example": "Carcinoid heart disease refers to cardiac manifestations of advanced\ncarcinoid tumors and carcinoid syndrome."
+          },
+          "slug": {
+            "type": "string",
+            "example": "/condition/carcinoid-heart-disease"
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "intravenous",
+              "oral",
+              "rectal"
+            ]
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Cardiac"
+                },
+                "anchor": {
+                  "type": "string",
+                  "example": "CARDIAC"
+                },
+                "path": {
+                  "type": "array",
+                  "example": [
+                    "History and Physical ",
+                    " Physical ",
+                    "Cardiac"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "pubType": {
+            "required": [
+              "title"
+            ],
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "example": "Condition"
+              }
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rel": {
+                  "type": "string",
+                  "example": "self"
+                },
+                "href": {
+                  "type": "string",
+                  "example": "https://ebscois.apigee.net/medsapi-dynamed/v1/articles/T114087"
+                }
+              }
+            }
+          }
+        }
+      },
+      "image-item": {
+        "required": [
+          "contentLocations",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "I509098"
+          },
+          "title": {
+            "type": "string",
+            "example": "Apical 4 chamber view of heart."
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rel": {
+                  "type": "string",
+                  "example": "external"
+                },
+                "href": {
+                  "type": "string",
+                  "example": "http://res.cloudinary.com/eis-live/image/authenticated/f_auto/v1/EBSCOHealth/CCMS/I509101?__cld_token__=exp=1590236397~hmac=cb9faf1d1c73944bc70c2d75f"
+                }
+              }
+            }
+          },
+          "contentLocations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "required": [
+                    "slug",
+                    "title"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Ultrasound in the Intensive Care Unit (ICU)"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "example": "/evaluation/ultrasound-in-the-intensive-care-unit-icu"
+                    }
+                  }
+                },
+                "anchor": {
+                  "type": "string",
+                  "example": "I509100"
+                }
+              }
+            }
+          }
+        }
+      },
+      "search_suggestions": {
+        "title": "",
+        "type": "object",
+        "properties": {
+          "_metadata": {
+            "required": [
+              "aggregations",
+              "queryUsed",
+              "request",
+              "totalItems"
+            ],
+            "type": "object",
+            "properties": {
+              "queryUsed": {
+                "type": "string",
+                "description": "Term used by the search engine",
+                "example": "heart"
+              },
+              "totalItems": {
+                "type": "number",
+                "description": "Total number of items matching the query",
+                "example": 2289
+              },
+              "aggregations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "description": "Indicates how many and what publication types each\nsearch match would fall into.",
+                      "example": "suggestionType"
+                    },
+                    "counts": {
+                      "required": [
+                        "term",
+                        "title"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "number",
+                          "description": "Name of the title along with the count of items returned by the search suggestion",
+                          "example": 10
+                        },
+                        "term": {
+                          "type": "number",
+                          "description": "Name of the term along with the count of items returned by the search suggestion",
+                          "example": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "request": {
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Term(s) that were specified, in the original language not corrected for typos",
+                    "example": "heart"
+                  }
+                }
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "suggestionType": {
+                  "type": "string",
+                  "description": "Type for the list of search results",
+                  "example": "title"
+                },
+                "suggestions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "completedPhrase": {
+                        "type": "string",
+                        "description": "Title of the article from DynaMed that matched\nthe search criteria",
+                        "example": "Heart Failure Alternative Treatments"
+                      },
+                      "queryMatches": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "start": {
+                              "type": "number",
+                              "description": "The location of the matched query term in\nthe matched resource"
+                            },
+                            "length": {
+                              "type": "number",
+                              "description": "The length of the matched term in the resource",
+                              "example": 5
+                            }
+                          }
+                        }
+                      },
+                      "resource": {
+                        "required": [
+                          "id",
+                          "links",
+                          "slug",
+                          "title"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Internal Id of the article",
+                            "example": "T566763"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "description": "Unique identifier of the article",
+                            "example": "/management/heart-failure-alternative-treatments\""
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Title of the article",
+                            "example": "Heart Failure Alternative Treatments"
+                          },
+                          "links": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "rel": {
+                                  "type": "string",
+                                  "example": "self"
+                                },
+                                "href": {
+                                  "type": "string",
+                                  "description": "Self link to fetch the content of the\narticle",
+                                  "example": "https://host:port/medsapi/v1/articles/T566763"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "pubtypes": {
+        "type": "object",
+        "properties": {
+          "_metadata": {
+            "type": "object",
+            "properties": {
+              "totalItems": {
+                "type": "integer",
+                "description": "Total number of resources accessible through this request.",
+                "example": 12
+              },
+              "links": {
+                "type": "array",
+                "description": "Hypermedia links for this resource collection.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "rel": {
+                      "type": "string",
+                      "description": "Relation type of the coresponding href value.",
+                      "example": "self"
+                    },
+                    "href": {
+                      "type": "string",
+                      "description": "Absolute link pointing to related resource.",
+                      "example": "https://host:port/medsapi-dynamed/v1/pubtypes"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Details about this response."
+          },
+          "items": {
+            "type": "array",
+            "description": "An array containing the current page of publication types.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The unique identifier for this publication type.",
+                  "example": "condition"
+                }
+              }
+            }
+          }
+        }
+      },
+      "article": {
+        "type": "object",
+        "properties": {
+          "toc": {
+            "type": "array",
+            "description": "Table of contents for this article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Title of the section",
+                  "example": "Overview and Recommendations"
+                },
+                "children": {
+                  "type": "array",
+                  "description": "an array of subsections",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Title of the section, e.g., `Zika Virus Infection`"
+                      },
+                      "children": {
+                        "type": "array",
+                        "description": "an array of subsections",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string",
+                              "description": "Title of the article section",
+                              "example": "Background"
+                            },
+                            "anchor": {
+                              "type": "string",
+                              "description": "The anchor location of the section",
+                              "example": "BACKGROUND"
+                            }
+                          }
+                        }
+                      },
+                      "anchor": {
+                        "type": "string",
+                        "description": "The anchor location of the subsection.",
+                        "example": "GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA"
+                      }
+                    }
+                  }
+                },
+                "anchor": {
+                  "type": "string",
+                  "description": "The anchor location of the section."
+                }
+              }
+            }
+          },
+          "images": {
+            "type": "array",
+            "description": "Images for this article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "title for this image",
+                  "example": "Cardiac arrest survival rates"
+                },
+                "copyright": {
+                  "type": "string",
+                  "description": "copyright for this image",
+                  "example": "Courtesy of The JAMA Network® ©American Medical Association"
+                },
+                "imageProvider": {
+                  "type": "string",
+                  "description": "provider of this image",
+                  "example": "AMA"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "description of this image",
+                  "example": "The main plot shows survival probability during the first\n90 days, and the inset shows survival probability over the full\nobservational period. Survival analysis was based on cardiac arrests\nthat occurred between January 1, 2009, and October 2, 2011. Mortality\nwas observed until December 31, 2011, when the data were censored;\nthus, there was follow-up to at least 90 days for each beneficiary.\nALS indicates advanced life support; BLS, basic life support."
+                },
+                "id": {
+                  "type": "string",
+                  "description": "image id",
+                  "example": "i508496"
+                },
+                "links": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "rel": {
+                        "type": "string",
+                        "example": "external"
+                      },
+                      "href": {
+                        "type": "string",
+                        "example": "http://res.cloudinary.com/eis-live/image/authenticated/f_auto/v1/EBSCOHealth/CCMS/I509101?__cld_token__=exp=1590236397~hmac=cb9faf1d1c73944bc70c2d75f"
+                      }
+                    }
+                  }
+                },
+                "contentLocations": {
+                  "type": "array",
+                  "description": "array of locations for this image",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "parent": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "title of this article",
+                            "example": "Cardiac Arrest in Adults"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "description": "slug for this article",
+                            "example": "/condition/cardiac-arrest-in-adults"
+                          }
+                        }
+                      },
+                      "anchor": {
+                        "type": "string",
+                        "description": "The anchor of this image in the parent",
+                        "example": "I508496"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "referenceLinks": {
+            "type": "array",
+            "description": "Reference links for this article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "anchor": {
+                  "type": "string",
+                  "description": "the anchor of the containing content",
+                  "example": "GUID-165FCFE4-2101-4D94-9757-4D7F919F01E2__ANC_1795582378"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "the link xml content",
+                  "example": "<li class=\"li\" id=\"GUID-165FCFE4-2101-4D94-9757-4D7F919F01E2__ANC_1795582378\">\nSubbiah R, Gula LJ, Klein GJ, et al. Workup of the cardiac arrest\nsurvivor: for the symposium on sudden cardiac death for progress\nin cardiovascular diseases. <a class=\"xref extlinkhtml\" href=\"http://www.ncbi.nlm.nih.gov/pubmed/19026854?dopt=Abstract\"\ntarget=\"_blank\"><span class=\"data\" property=\"pubmed\" value=\"19026854\"></span>Prog\nCardiovasc Dis. 2008 Nov-Dec;51(3):195-203</a></li>"
+                }
+              }
+            }
+          },
+          "consensusDetails": {
+            "type": "array",
+            "description": "an array of consensus details for the article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "anchor": {
+                  "type": "string",
+                  "description": "the anchor of this consensus detail",
+                  "example": "GUID-A2F4CE2A-184D-4187-B2EF-6D2FD17FB43E__CONSENSUSDETAIL"
+                },
+                "noteContent": {
+                  "type": "string",
+                  "description": "structured content of the note",
+                  "example": "<div class=\"bodydiv consensusNote\">Content referenced with\n&ldquo;Consensus&rdquo; in Hospitalist Focused Content is supported\nby a combination of the best available evidence and expert opinion\nput forth by a panel of Hospitalists.</div>"
+                },
+                "panelContent": {
+                  "type": "string",
+                  "description": "xml describing the panel composition",
+                  "example": "<div class=\"bodydiv consensusPanel\"><p class=\"p\">Panel participants:</p><ul\nclass=\"ul\"><li class=\"li\">Vijay Duggirala, MD: Clinical Assistant\nProfessor, The Ohio State University College of Nursing; Clinical\nAssistant Professor, The Ohio State University College of Medicine;\nHospitalist, Director of Consult Services and Director of Quality\n&amp; Patient Safety, Division of Hospital Medicine, The Ohio State\nWexner Medical Center; Ohio, United States</li><li class=\"li\">Dr.\nDuggirala declares no relevant financial conflicts of interest.</li><li\nclass=\"li\">Chi Huang, MD: Executive Medical Director of General\nMedicine and Hospital Medicine Shared Services, Wake Forest Baptist\nHealth System; Section Chief, Hospital Medicine, Wake Forest Baptist\nMedical Center; Associate Professor of Internal Medicine, Wake Forest\nMedical School; North Carolina, United States</li><li class=\"li\">Dr.\nHuang declares no relevant financial conflicts of interest.</li><li\nclass=\"li\">Richard Rothman, MD: Chair and Physician Advisor, Department\nof Hospital Medicine, Cleveland Clinic India River Hospital; Florida,\nUnited States</li><li class=\"li\">Dr. Rothman declares no relevant\nfinancial conflicts of interest.</li><li class=\"li\">Andr&eacute;s\nJ. Solorza, MD: Assistant Clinical Professor, Tufts University;\nChair-Person, Department of Hospital Medicine, Lahey Hospital and\nMedical Center; Massachusetts, United States</li><li class=\"li\">Dr.\nSolorza declares no relevant financial conflicts of interest.</li><li\nclass=\"li\">Nestor G. Tarragona, MD, FHM, FACP: Assistant Professor\nof Medicine, Tufts University School of Medicine; Vice Chairperson,\nDivision of Hospital Medicine, Lahey Hospital and Medical Center;\nMedical Director for Latin America, Teladoc Health; Massachusetts,\nUnited States</li><li class=\"li\">Dr. Tarragona declares no relevant\nfinancial conflicts of interest.</li><li class=\"li\">Yoania Quintana-Garcia,\nMD: Hospitalist, Cleveland Clinic Indian River Hospital; Florida,\nUnited States</li><li class=\"li\">Dr. Quintana-Garcia declares no\nrelevant financial conflicts of interest.</li></ul></div>"
+                }
+              }
+            }
+          },
+          "slug": {
+            "type": "string",
+            "description": "Complete slug of the article, e.g., `/condition/zika-virus-infection`.\nThe complete slug is made of the pubType ID, (`condition`) and the title\n(`zika-virus-infection`)",
+            "example": "/condition/cardiac-arrest-in-adults"
+          },
+          "id": {
+            "type": "string",
+            "description": "ID of the article",
+            "example": "t116814"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the article, e.g., `Zika Virus Infection`",
+            "example": "Cardiac Arrest in Adults"
+          },
+          "sections": {
+            "type": "array",
+            "description": "subsections of the article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "title of this section",
+                  "example": "Related Summaries"
+                },
+                "anchor": {
+                  "type": "string",
+                  "description": "anchor of this section",
+                  "example": "GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "content for this section",
+                  "example": "<div aria-labelledby=\"ariaid-title2\" class=\"topic nested1\"\nid=\"GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA\" lang=\"en\" xml:lang=\"en\"><h2\nclass=\"title topictitle2\" id=\"ARIAID-TITLE2\">Related Summaries</h2><div\nclass=\"body\"><ul class=\"ul\"><li class=\"li\"><a class=\"link internal\"\nhref=\"/condition/ventricular-fibrillation\">Ventricular fibrillation</a></li><li\nclass=\"li\"><a class=\"link internal\" href=\"/condition/sudden-cardiac-death\">Sudden\ncardiac death</a></li><li class=\"li\"><a class=\"link internal\" href=\"/approach-to/ventricular-tachycardia-approach-to-the-patient\">Ventricular\ntachycardia &ndash; approach to the patient</a></li><li class=\"li\"><a\nclass=\"link internal\" href=\"/management/advanced-cardiovascular-life-support-acls\">Advanced\ncardiovascular life support (ACLS)</a></li><li class=\"li\"><a class=\"link\ninternal\" href=\"/management/adult-basic-life-support-bls\">Adult\nbasic life support (BLS)</a></li><li class=\"li\"><a class=\"link internal\"\nhref=\"/management/immediate-post-cardiac-arrest-care\">Immediate\npost-cardiac arrest care</a></li><li class=\"li\"><a class=\"link internal\"\nhref=\"/management/therapeutic-hypothermia-for-neuroprotection-following-cardiac-arrest\">Therapeutic\nhypothermia for neuroprotection following cardiac arrest</a></li><li\nclass=\"li\"><a class=\"link internal\" href=\"/device/implantable-cardioverter-defibrillator-icd\">Implantable\ncardioverter defibrillator (ICD)</a></li><li class=\"li\"><a class=\"link\ninternal\" href=\"/condition/st-elevation-myocardial-infarction-stemi\">ST-elevation\nmyocardial infarction (STEMI)</a></li><li class=\"li\"><a class=\"link\ninternal\" href=\"/condition/acute-coronary-syndromes\">Acute coronary\nsyndromes</a></li><li class=\"li\"><a class=\"link internal\" href=\"/condition/coronary-artery-disease-cad\">Coronary\nartery disease (CAD)</a></li></ul></div></div>"
+                }
+              }
+            }
+          },
+          "pubType": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "pubType of the article",
+                "example": "condition"
+              }
+            },
+            "description": "array of pub types for this article"
+          },
+          "updates": {
+            "type": "array",
+            "description": "Updates to this article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "text updated for this article",
+                  "example": "initial shockable rhythm, witnessed arrest, monitored arrest,\nand arrest during daytime hours each associated with increased in-hospital\nor survival within 30 days in patients with in-hospital cardiac\narrest (BMJ 2019 Dec 4)"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "description": "time of update",
+                  "example": "2019-12-17T14:33:32.000Z"
+                },
+                "practiceChangingUpdate": {
+                  "type": "boolean",
+                  "description": "is this a practice changing update?",
+                  "example": false
+                },
+                "anchor": {
+                  "type": "string",
+                  "description": "the anchor location relevant to this update",
+                  "example": "SURVIVAL_FOR_IN-HOSPITAL_CARDIAC_ARREST__LI_JJM_23W_BKB"
+                },
+                "updateType": {
+                  "type": "string",
+                  "description": "the type of this update",
+                  "example": "evidenceUpdate",
+                  "enum": [
+                    "evidenceUpdate",
+                    "recommendationUpdate",
+                    "drugDeviceUpdate",
+                    "outbreakUpdate",
+                    "guidelineNotationUpdate",
+                    "guidelineSummaryUpdate",
+                    "reviewArticleUpdate"
+                  ]
+                },
+                "updatePriority": {
+                  "type": "string",
+                  "description": "the priority of this update",
+                  "example": "standard"
+                }
+              }
+            }
+          },
+          "contributors": {
+            "type": "array",
+            "description": "Contributors to this Article",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "label of contributor",
+                  "example": "Topic Editor "
+                },
+                "shortName": {
+                  "type": "string",
+                  "description": "short name of contributor",
+                  "example": "Dr. Lang"
+                },
+                "conflictsText": {
+                  "type": "string",
+                  "description": "description of any conflicts of interest",
+                  "example": "Dr. Lang declares no relevant financial conflicts of interest."
+                },
+                "affiliationText": {
+                  "type": "string",
+                  "description": "contributor affiliations",
+                  "example": "Zone Clinical and Academic Department Head for Emergency\nMedicine and Professor of Emergency Medicine, University of Calgary;\nAlberta, Canada; Senior Researcher, Alberta Health Services; Alberta,\nCanada"
+                },
+                "fullName": {
+                  "type": "string",
+                  "description": "contributor name",
+                  "example": "Eddy Lang MDCM, CCFP(EM), CSPQ"
+                }
+              }
+            }
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "intravenous",
+              "oral",
+              "rectal"
+            ]
+          }
+        }
+      },
+      "categories": {
+        "required": [
+          "_metadata",
+          "items"
+        ],
+        "type": "object",
+        "properties": {
+          "_metadata": {
+            "required": [
+              "links",
+              "page",
+              "totalItems",
+              "totalPages"
+            ],
+            "type": "object",
+            "properties": {
+              "links": {
+                "type": "array",
+                "items": {
+                  "required": [
+                    "href",
+                    "rel"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "rel": {
+                      "type": "string",
+                      "example": "self"
+                    },
+                    "href": {
+                      "type": "string",
+                      "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/categories"
+                    }
+                  }
+                }
+              },
+              "page": {
+                "type": "integer",
+                "description": "Current page of results",
+                "format": "int32",
+                "example": 1
+              },
+              "totalPages": {
+                "type": "integer",
+                "description": "Total number of pages",
+                "format": "int32",
+                "example": 1
+              },
+              "totalItems": {
+                "type": "integer",
+                "description": "Total number of items that are returned",
+                "format": "int32",
+                "example": 2
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id",
+                "links",
+                "title"
+              ],
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Title of the article",
+                  "example": "Allergy"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "ID used to retrieve the topic",
+                  "example": "allergy"
+                },
+                "links": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "href",
+                      "rel"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "rel": {
+                        "type": "string",
+                        "description": "",
+                        "example": "self"
+                      },
+                      "href": {
+                        "type": "string",
+                        "description": "Link to the category topic",
+                        "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/categories/allergy"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "categoriesById": {
+        "title": "",
+        "required": [
+          "id",
+          "links",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Category Id",
+            "example": "cardiology"
+          },
+          "title": {
+            "type": "string",
+            "description": "Categry name",
+            "example": "Cardiology"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "required": [
+                "href",
+                "rel"
+              ],
+              "type": "object",
+              "properties": {
+                "rel": {
+                  "type": "string",
+                  "description": "Self link and links to all categories",
+                  "example": "self"
+                },
+                "href": {
+                  "type": "string",
+                  "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/categories/cardiology"
+                }
+              }
+            }
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Non-ST-elevation Acute Coronary Syndromes (NSTE-ACS)"
+                },
+                "children": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "title"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Title of this particular category",
+                        "example": "Acute Coronary Syndromes"
+                      },
+                      "children": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string",
+                              "description": "Title of a child category",
+                              "example": "Suspected Acute Coronary Syndrome"
+                            },
+                            "resources": {
+                              "type": "array",
+                              "description": "List of child categories",
+                              "items": {
+                                "required": [
+                                  "id",
+                                  "slug",
+                                  "title"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "type": "string",
+                                    "description": "Title of this sub-category"
+                                  },
+                                  "slug": {
+                                    "type": "string",
+                                    "example": "/condition/acute-coronary-syndromes"
+                                  },
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Id of this sub-category",
+                                    "example": "T116779"
+                                  },
+                                  "links": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "rel": {
+                                          "type": "string",
+                                          "example": "self"
+                                        },
+                                        "href": {
+                                          "type": "string",
+                                          "description": "Link to this sub category",
+                                          "example": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T116779"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "detailedClaims": {
+        "type": "object",
+        "description": "First time user will get the list of detailed claims: credit type, submission date, certificate id and the associated sections.",
+        "properties": {
+          "_metadata": {
+            "properties": {
+              "totalItems": {
+                "type": "string",
+                "example": 3,
+                "description": "Total number of available items."
+              },
+              "totalPages": {
+                "type": "string",
+                "example": 3,
+                "description": "Number of Available Pages"
+              },
+              "page": {
+                "type": "string",
+                "example": 3,
+                "description": "Page of items that have been returned."
+              },
+              "pageSize": {
+                "type": "string",
+                "example": 4,
+                "description": "Total number of items to return per page."
+              },
+              "links": {
+                "type": "array",
+                "description": "Array of References",
+                "example": [
+                  {
+                    "rel": "self",
+                    "href": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/user/detailed-claims?startDate=2020-10-23&endDate=2020-11-17&page=2&pageSize=10"
+                  }
+                ]
+              },
+              "items": {
+                "type": "array",
+                "description": "Contains list of items",
+                "example": [
+                  {
+                    "id": 1,
+                    "certificateType": "ASCOFAME",
+                    "degreeFullName": "Default degree for ASCOFAME credit type",
+                    "submitDate": "2020-10-28T08:54:51.595Z",
+                    "credits": [
+                      {
+                        "id": 2,
+                        "articles": [
+                          {
+                            "id": "T999999",
+                            "links": [
+                              {
+                                "rel": "self",
+                                "href": "https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T907696"
+                              }
+                            ],
+                            "title": "Gadobenate",
+                            "accessTime": "2020-10-28T08:54:22.785Z",
+                            "section": [
+                              {
+                                "id": "7365",
+                                "title": "Dosing & Indications",
+                                "accessTime": "2020-10-28T08:54:22.785Z"
+                              }
+                            ],
+                            "creditHours": 0.5,
+                            "creditType": "ASCOFAME"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Standardized label for this error",
+            "example": "Error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Details about this error",
+            "example": "Error description."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Bearer Token"
+      }
+    }
+  }
+}
