@@ -1,0 +1,1013 @@
+{
+  "sections": [
+    {
+      "title": "Introduction",
+      "definition": "The EIS Clinical Decisions API Glossary is the central hub for terminology used in APIs across the ART. This allows individual teams to create products that have a consistant voice for our customers.\n\nTo contribute to this glossary please see the [Contributing](contribute.md) page."
+    },
+    {
+      "title": "Locations and Identifiers"
+    },
+    {
+      "title": "Collections and Pagination"
+    },
+    {
+      "title": "Hypermedia",
+      "definition": "Clinical Decisions public APIs are hypermedia compliant in accordance with the [hypermedia guidelines](http://api-design-dev-guide.s3-website-us-east-1.amazonaws.com/docs/design-guidelines/#hypermedia) of the EIS API Design Guide."
+    },
+    {
+      "title": "Terms"
+    },
+    {
+      "title": "Dublin Core (DC) Terms",
+      "definition": "These terms are externally managed by the Dublin Core Metadata Initiative. Details on term meanings and usage can be found on the [DC site](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)."
+    },
+    {
+      "title": "Uncategorized Terms"
+    }
+  ],
+  "terms": [
+    {
+      "section": "Collections and Pagination",
+      "title": "aggregations",
+      "dataType": "Array",
+      "definition": "An array of total item counts aggregated by the values of a response field.",
+      "example": "\"aggregations\": [\"field\": \"pubTypeId\", \"counts\": { \"Image\": 8, \"condition\": 410, \"drug\": 154, \"lab\": 7 }]",
+      "foundIn": [
+        "Response"
+      ],
+      "synonyms": ["buckets"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "slug",
+      "dataType": "String",
+      "definition": "An SEO-friendly string designed to be added to the end of a URL to uniquely identify a resource in a particular context. Can consist of one or more path segments..",
+      "example": "\"slug\": \"/management/heart-failure-alternative-treatments\"",
+      "foundIn": [
+        "Response"
+      ],
+      "synonyms": ["link, path, url, uri, segment"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "id",
+      "dataType": "String",
+      "definition": "The unique identifier for a resource.  Since the ID is used in the resource ID segment of the resource path, it must not contain forward slashes. See also [slug](#slug).",
+      "example": "\"anchor\": \"GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA\"",
+      "foundIn": [
+        "Response"
+      ],
+      "synonyms": ["an", "identifier"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "_metadata",
+      "dataType": "Object",
+      "definition": "A required property of a collection resource, containing information about the response, including hypermedia [links](#links) and [totalItems](#totalitems), at a minimum.",
+      "example": "\"_metadata\": { \"page\": 1, \"pageSize\": 10 }",
+      "foundIn": [
+        "Response"
+      ],
+      "synonyms": []
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "anchor",
+      "dataType": "String",
+      "definition": "An HTML anchor used to identify (and link to) an element within a larger string of HTML. Anchors are represented in the HTML using the @id attribute.",
+      "example": "\"anchor\"': \"GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA\"",
+      "foundIn": [
+        "Response"
+      ],
+      "synonyms": ["link"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "{prefix}Id",
+      "dataType": "String",
+      "definition": "In query parameters only, used to distinguish the ID of the desired resource from those of other resources. For an example see [pubTypeId](#pubtypeid)",
+      "foundIn": [
+        "Query Parameter"
+      ],
+      "synonyms": ["id", "an"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "slug",
+      "dataType": "String",
+      "definition": "An SEO-friendly string designed to be added to the end of a URL to uniquely identify a resource in a particular context. Can consist of one or more path segments. For instance, DynaMed slugs are appended to the DynaMed URL to take users directly to individual articles. The slug is not the resource ID. For that, use [id](#id).",
+      "example": "\"slug\": \"/management/heart-failure-alternative-treatments\"",
+      "foundIn": ["Response"],
+      "synonyms": ["slugUrl", "redirectTo"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "field",
+      "dataType": "String",
+      "definition": "The name of a field in the response.  In the case of aggregated item counts, the field by which counts are aggregated.  See also [aggregations](#aggregations).",
+      "example": "\"field\": \"pubTypeId\"",
+      "foundIn": [],
+      "synonyms": []
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "counts",
+      "dataType": "String",
+      "definition": "In aggregated item counts, an object representing the total number of items for each field value.  See also [aggregations](#aggregations).",
+      "example": "\"counts\": { \"drug\": 4820 }",
+      "foundIn": [],
+      "synonyms": []
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "items",
+      "dataType": "Array",
+      "definition": "An array containing the current page of the result list.",
+      "example": "",
+      "foundIn": [],
+      "synonyms": []
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "page",
+      "dataType": "Integer",
+      "definition": "A number representing the page of the response. A page will consist of an array of [items](#items).",
+      "example": "\"page\": 1",
+      "foundIn": [],
+      "synonyms": ["offset"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "pageSize",
+      "dataType": "Integer",
+      "definition": "The maximum number of items per page of the response. ",
+      "example": "\"pageSize\": 50",
+      "foundIn": [],
+      "synonyms": ["size"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "pageToken",
+      "dataType": "String",
+      "definition": "A string identifying a previous result set for the purpose of navigating to additional pages of a paginated response. Useful in some cases more than others, such as when querying on a large data set.",
+      "example": "\"pageToken\": \"31e10790-d841-4e38-83f2-cb6535e7068a\"",
+      "foundIn": [],
+      "synonyms": ["resultSetId", "id"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "request",
+      "dataType": "Object",
+      "definition": "An object property of a collection resource containing information about the parameters submitted in the request.\n\nUsed especially when the parameters submitted in the request may be changed before the GET action is performed, such as when a query term is translated.",
+      "example": "\"request\": { \"query\": \"kopf\", \"queryLanguage\": \"de\", \"pubTypeIds\": [ \"condition\"] }",
+      "foundIn": [],
+      "synonyms": ["totalHits"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "totalItems",
+      "dataType": "Integer",
+      "definition": "Total count of resources in the collection regardless of pagination.",
+      "example": "\"totalItems\": 140",
+      "foundIn": [],
+      "synonyms": []
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "totalPages",
+      "dataType": "Integer",
+      "definition": "The total count of pages in the collection.",
+      "example": "\"totalPages\": 3",
+      "foundIn": [],
+      "synonyms": []
+    },
+    {
+      "section": "Hypermedia",
+      "title": "links",
+      "dataType": "Array",
+      "definition": "An array of Link Description Objects that can be used to navigate the API.  For more details, see the [links array](http://api-design-dev-guide.s3-website-us-east-1.amazonaws.com/docs/design-guidelines/#links-array) and [link description object](http://api-design-dev-guide.s3-website-us-east-1.amazonaws.com/docs/design-guidelines/#link-description-object) sections of the EIS API Design Guide.",
+      "example": "\"links\": [{ \"href\": \"https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T116814\", \"rel\": \"self\" }]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Hypermedia",
+      "title": "rel",
+      "dataType": "String",
+      "definition": "Relation type of the link.  Values must be selected from a standard set of terms.  A list of common relation types and other guidance related to this property can be found in the [link relation type](http://api-design-dev-guide.s3-website-us-east-1.amazonaws.com/docs/design-guidelines/#link-relation-type) section of the EIS API Design Guide.",
+      "example": "\"rel\": \"self\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Hypermedia",
+      "title": "href",
+      "dataType": "String",
+      "definition": "Absolute URL pointing to the resource.",
+      "example": "\"href\": \"https://ebscois-live.apigee.net/medsapi-dynamed/v1/pubtypes\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Hypermedia",
+      "title": "method",
+      "dataType": "String",
+      "definition": "The HTTP verb that must be used to make a request to the target link. This property must be included for all links that require a method other than GET. If the method property is omitted, a default value of GET is assumed.",
+      "example": "\"method\": \"POST\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "abstract",
+      "dataType": "String",
+      "definition": "Descriptive summary of the resource.",
+      "example": "\"abstract\": \"Promoting safe patient mobility using the assistive device\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "accessTime",
+      "dataType": "String",
+      "definition": "Last time the resource was accessed. (ISO 8601)",
+      "example": "\"accessTime\": \"2020-10-28T08:54:51.595Z\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "affiliationText",
+      "dataType": "String",
+      "definition": "Text describing the professional affiliations of a contributor to a resource.  For an example in context see [contributors](#contributors).",
+      "example": "\"affiliationText\": \"Site Director, Pulmonary and Critical Care Fellowship Program, and Clinical Professor of Medicine, Brown University Alpert Medical School; Rhode Island, United States\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "article",
+      "dataType": "Object",
+      "definition": "A publication containing one or more sections of content and a table of contents.",
+      "example": "",
+      "foundIn": [""],
+      "synonyms": ["topic"]
+    },
+    {
+      "section": "Terms",
+      "title": "available",
+      "dataType": "Integer",
+      "definition": "Amount of available credits based on reviewed content.",
+      "example": "\"available\": 0",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "categoryPath",
+      "dataType": "String",
+      "definition": "The hierachical category path.",
+      "example": "\"categoryPath\": \"Skills|Nursing Skills|Specialties\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "certificateType",
+      "dataType": "String",
+      "definition": "The type of certificate.",
+      "example": "\"certificateType\": \"ASCOFAME\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "children",
+      "dataType": "Array",
+      "definition": "Array of items structurally similar to but hierarchically subordinate to the containing object.  Example use cases: table of contents (see [toc](#toc)) and specialty browse.",
+      "example": "\"children\": [{ \"title\": \"Non-ST-elevation Acute Coronary Syndromes (NSTE-ACS)\", \"children\": [{ \"title\": \"Types\", \"resources\": [{ \"id\": \"T906417\", \"title\": \"Suspected Acute Coronary Syndrome\", \"slug\": \"/condition/suspected-acute-coronary-syndrome\", \"links\": [{ \"rel\": \"self\", \"href\": \"https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T906417\" }] }] }] }]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "claimed",
+      "dataType": "Integer",
+      "definition": "Amount of claimed credits. Claimed credits are those which have been submitted for consideration to the accreditor.",
+      "example": "\"claimed\": 18.56",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "completedPhrase",
+      "dataType": "String",
+      "definition": "The phrase completed via search suggestion.",
+      "example": "\"completedPhrase\": \"Bed Bug Bites\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "conflictsText",
+      "dataType": "String",
+      "definition": "Text describing a contributor's conflicts of interest, if any.  For an example in context, see [contributors](#contributors).",
+      "example": "\"conflictsText\": \"Dr. Nici declares no relevant financial conflicts of interest.\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "content",
+      "dataType": "String",
+      "definition": "The substance or content of any part of a resource, in a structured format such as XML, HTML or JSON. For unstructured content, use [text](#text). See also [{prefix}Content](#prefixcontent).",
+      "example": "\"content\": \"<div id=\"GUID-FB77A5C3-0DDC-43A9-A0E3-AA620716EE77\">[...]</div>\"",
+      "foundIn": [""],
+      "synonyms": ["html"]
+    },
+    {
+      "section": "Terms",
+      "title": "{prefix}Content",
+      "dataType": "String",
+      "definition": "The substance or content of any part of a resource, in a structured format such as XML, HTML or JSON. Used instead of [content](#content) when more than one property of an object contains structured content. If no disambiguation is required, use [content](#content). For unstructured content, use [text](#text). Examples: [noteContent](#notecontent), [panelContent](#panelcontent)",
+      "example": "",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "contentLocations",
+      "dataType": "Array",
+      "definition": "List of locations of the given resource in the content. ",
+      "example": "\"contentLocations\": [{ \"parent\": { \"title\": \"Nail Bed Injury - Emergency Management\", \"slug\": \"/management/nail-bed-injury-emergency-management\" }, \"anchor\": \"I507165\" }]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "consensusDetails",
+      "dataType": "Array",
+      "definition": "Collection of content snippets describing the consensus details for the article.",
+      "example": "\"consensusDetails\": [{ \"anchor\":  \"GUID-A2F4CE2A-184D-4187-B2EF-6D2FD17FB43E__CONSENSUSDETAIL\", \"noteContent\": \"<div class=\"bodydiv consensusNote\">Content referenced with &ldquo;Consensus&rdquo; in Hospitalist Focused Content is supported by a combination of the best available evidence and expert opinion put forth by a panel of Hospitalists.</div>\", \"panelContent\": \"<div class=\"bodydiv consensusPanel\"><p class=\"p\">Panel participants:</p><ul class=\"ul\"><li class=\"li\">Dr. Quintana-Garcia declares no relevant financial conflicts of interest.</li></ul></div>\" }]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "contributors",
+      "dataType": "Array",
+      "definition": "Descriptions of the contributors to the resource.",
+      "example": "\"contributors\": [{ \"label\": \"Topic Editor\", \"shortName\": \"Dr. Nici\", \"conflictsText\": \"Dr. Nici declares no relevant financial conflicts of interest.\", \"affiliationText\": \"Site Director, Pulmonary and Critical Care Fellowship Program, and Clinical Professor of Medicine, Brown University Alpert Medical School; Rhode Island, United States\", \"fullName\": \"Linda Nici MD\" }]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "copyright",
+      "dataType": "String",
+      "definition": "The copyright details of a resource.",
+      "example": "\"copyright\": \"Cirpaciu D, Goanta CM, Cirpaciu MD. Recurrences of Bell's palsy. J Med Life. 2014;7 Spec No. 3:68-77. Reproduced under Creative Commons Attribution License 2.0.\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "creditHours",
+      "dataType": "Integer",
+      "definition": "Number of hours for this credit.",
+      "example": "\"creditHours\": 0.5",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "creditType",
+      "dataType": "String",
+      "definition": "Type of credit.",
+      "example": "\"creditType\": \"ASCOFAME\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "credits",
+      "dataType": "Array",
+      "definition": "Array of objects that contain credits information.",
+      "example": "\"credits\": [ { \"id\": 2, \"articles\": [ { \"id\": \"T999999\", \"links\": [ { \"rel\": \"self\", \"href\": \"https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T907696\" } ], \"title\": \"Gadobenate\", \"accessTime\": \"2020-10-28T08:54:22.785Z\", \"section\": [ { \"id\": \"7365\", \"title\": \"Dosing & Indications\", \"accessTime\": \"2020-10-28T08:54:22.785Z\" } ], \"creditHours\": 0.5, \"creditType\": \"ASCOFAME\" } ] } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "degreeFullName",
+      "dataType": "String",
+      "definition": "Full name of degree.",
+      "example": "\"degreeFullName\": \"Default degree for ASCOFAME credit type\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "description",
+      "dataType": "String",
+      "definition": "Textual description of a resource or other object.  For an example in context see [image](#image).",
+      "example": "\"description\": \"A patient with right facial palsy, dynamic asymmetry.\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "documentation",
+      "dataType": "String",
+      "definition": "Relevant documentation.",
+      "example": "\"documentation\": \"No documentation\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "eventType",
+      "dataType": "String",
+      "definition": "Event type for the resource.",
+      "example": "\"eventType\": \"OPEN_ITEM\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "fields",
+      "dataType": "Array",
+      "definition": "The fields included in the request/response.",
+      "example": "\"fields\": [ \"title\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "firstName",
+      "dataType": "String",
+      "definition": "First name of relevant person.",
+      "example": "\"firstName\": \"John\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "fullName",
+      "dataType": "String",
+      "definition": "The full name of a person or intitution.  See also [shortName](#shortname).",
+      "example": "\"fullName\": \"Linda Nici MD\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "hasChildren",
+      "dataType": "Boolean",
+      "definition": "Indicates if the object has children. See also [children](#children).",
+      "example": "\"hasChildren\": true",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "hidden",
+      "dataType": "Boolean",
+      "definition": "Value indicating whether the parent resource should be hidden from users.  In DynamicHealth, this value is determined by an institution for all users at the institution.",
+      "example": "\"hidden\": true",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "image",
+      "dataType": "Object",
+      "definition": "A resource describing an image.",
+      "example": "{ \"title\": \"Facial palsy in Lyme Disease\", \"copyright\": \"\", \"imageProvider\": \"Centers for Disease Control and Prevention\", \"description\": \"This patient presented with a case of facial palsy caused by an infection by the bacterial spirochete Borrelia burgdorferi, and was subsequently diagnosed with Lyme disease. In addition to multiple (secondary) erythema migrans lesions, an early disseminated Lyme disease infection may manifest itself as a disease of the nervous system, the musculoskeletal system, or the heart.\", \"id\": \"i502636\", \"links\": [ { \"rel\": \"external\", \"href\": \"http://res.cloudinary.com/eis-live/image/authenticated/f_auto/v1/EBSCOHealth/CCMS/i502636?__cld_token__=exp=1590183968~hmac=f5df648354b6ab876a023e1ac291d812158d996e5bc8189c897d928d7aafc1c0\" } ], \"contentLocations\": [ { \"parent\": { \"title\": \"Bell Palsy\", \"slug\": \"/condition/bell-palsy\" }, \"anchor\": \"I502636\" } ] }",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "images",
+      "dataType": "Array",
+      "definition": "A collection of [image](#image) resources.",
+      "example": "",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "imageProvider",
+      "dataType": "String",
+      "definition": "Source of an image described by an [image](#image) resource.",
+      "example": "\"imageProvider\": \"Centers for Disease Control and Prevention\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "initiatedBy",
+      "dataType": "String",
+      "definition": "Initiating source of the search.",
+      "example": "\"initiatedBy\": \"typed-in\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "label",
+      "dataType": "String",
+      "definition": "A brief description or designation.  To see an example in context, see [contributors](#contributors).",
+      "example": "\"label\": \"Topic Editor\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "lastName",
+      "dataType": "String",
+      "definition": "Last name of relevant person.",
+      "example": "\"lastName\": \"Smith\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "lastUpdate",
+      "dataType": "Object",
+      "definition": "Last update information.",
+      "example": "\"lastUpdate\": { \"timestamp\":  \"2020-03-01T23:01:59.908Z\", \"firstName\": \"John\", \"lastName\": \"Smith\", \"username\": \"jsmith\" }",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "lastViewTimestamp",
+      "dataType": "String",
+      "definition": "Date and time resource last viewed.",
+      "example": "\"lastViewTimestamp\": \"2020-10-19T19:03:59Z\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "noteContent",
+      "dataType": "String",
+      "definition": "Snippet of content containing a note. An instance of [{prefix}Content](#prefixcontent). For an example in context, see [consensusDetails](#consensusdetails). ",
+      "example": "",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "notes",
+      "dataType": "String",
+      "definition": "Related notes.",
+      "example": "\"notes\": \"Sterlize equipment before treating patient.\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "panelContent",
+      "dataType": "String",
+      "definition": "Snippet of content containing information about a panel of experts.  An instance of [{prefix}Content](#prefixcontent).  For an example in context, see [consensusDetails](#consensusdetails).",
+      "example": "",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "parent",
+      "dataType": "Object",
+      "definition": "Reference to a resource that contains the given resource as a subresource.  See also [contentLocations](#contentlocations).",
+      "example": "\"parent\": { \"title\": \"Bell Palsy\", \"slug\": \"/condition/bell-palsy\" }",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "paths",
+      "dataType": "Array",
+      "definition": "Hierarchial path to a section or subsection of content.  For an example in context, see [sections](#sections).",
+      "example": "\"paths\": [ \"History and Physical\", \"Physical\", \"Cardiac\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "patientFamilyEducation",
+      "dataType": "String",
+      "definition": "information relevant to patient-family education.",
+      "example": "\"patientFamilyEducation\": \"Boxford University of Medicine\nMassachusetts College of Studying\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "postProcedureSteps",
+      "dataType": "Array",
+      "definition": "Post-procedure steps defined for a skill.",
+      "example": "\"postProcedureSteps\": [ \"go to bed\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "practiceChangingUpdate",
+      "dataType": "Boolean",
+      "definition": "Value indicating whether a given update to an article indicates a need for a change in practice.  For an example in context, see [updates](#updates).",
+      "example": "",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "prepared",
+      "dataType": "Integer",
+      "definition": "Amount of prepared credits. Prepared credits are for content that has been reviewed and information needed by the accreditor has been created.",
+      "example": "\"prepared\": 1.5",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "preProcedureSteps",
+      "dataType": "Array",
+      "definition": "Medical pre-procedure steps defined for a skill.",
+      "example": "\"preProcedureSteps\": [ \"get out of bed\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "presentedAs",
+      "dataType": "String",
+      "definition": "The format of the response.",
+      "example": "\"presentedAs\": \"result-list\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "prevSearchTerm",
+      "dataType": "String",
+      "definition": "The previous search term.",
+      "example": "\"prevSearchTerm\": \"headache\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "procedureSteps",
+      "dataType": "Array",
+      "definition": "Procedure steps defined for a skill.",
+      "example": "\"procedureSteps\": [ \"wash face\", \"brush teeth\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "pubType",
+      "dataType": "Object",
+      "definition": "The classification given to a content resource. When specifying pubTypes in query parameters, use [pubTypeId](#pubtypeid).",
+      "example": "\"pubType\": { \"id\": \"drug\", \"title\": \"Drug Monograph\" }",
+      "foundIn": [""],
+      "synonyms": ["type"]
+    },
+    {
+      "section": "Terms",
+      "title": "pubTypeId",
+      "dataType": "String",
+      "definition": "Used in query parameters only (e.g., the search endpoint), to distinguish pubType IDs from the IDs of other resources. When including pubTypes in responses, use [pubType](#pubtype).  An instance of [{prefix}Id](#prefixid).",
+      "example": "pubTypeId=drug",
+      "foundIn": ["Query Parameter"],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "pubTypeIds",
+      "dataType": "Array",
+      "definition": "A collection of [pubTypeId](#pubtypeid) values.",
+      "example": "\"pubTypeIds\": [\"drug\", \"condition\"]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "purpose",
+      "dataType": "String",
+      "definition": "Purpose description.",
+      "example": "\"purpose\": \"Demo populated fields\nDemo multi line fields\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "query",
+      "dataType": "String",
+      "definition": "The query term submitted in the request. Can be a query parameter or a property of the \"request\" object in the response. For the query term used by the endpoint to perform the GET action use [queryUsed](#queryused).",
+      "example": "\"query\": \"Herz\"",
+      "foundIn": [""],
+      "synonyms": ["term", "originalTerm"]
+    },
+    {
+      "section": "Terms",
+      "title": "queryLanguage",
+      "dataType": "String",
+      "definition": "The language of the query term submitted in the request.  Language codes are two-letter abbreviations as outlined in [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).",
+      "example": "\"queryLanguage\": \"de\"",
+      "foundIn": [""],
+      "synonyms": ["lang", "language"]
+    },
+    {
+      "section": "Terms",
+      "title": "queryMatches",
+      "dataType": "Array",
+      "definition": "Collection of objects that provide location details for the matching terms in [queryUsed](#queryused).",
+      "example": "\"queryMatches\": [ { \"start\": 0, \"length\": 5 } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "queryUsed",
+      "dataType": "String",
+      "definition": "The term used by the endpoint itself to perform the GET action.  This may or may not be the same as the query term submitted in the request.  For the query submitted in the request, see [query](#query).",
+      "example": "\"queryUsed\": \"heart\"",
+      "foundIn": [""],
+      "synonyms": ["correctedTerm", "translatedSearchTerm"]
+    },
+    {
+      "section": "Terms",
+      "title": "redFlags",
+      "dataType": "Array",
+      "definition": "Red flags associated with a skill.",
+      "example": "\"redFlags\": [ \"drugs\", \"alcohol\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "referenceLinks",
+      "dataType": "Array",
+      "definition": "Collection of content snippets containing hyperlinked citations for an article.",
+      "example": "\"referenceLinks\": [ { \"anchor\": \"GUID-165FCFE4-2101-4D94-9757-4D7F919F01E2__ANC_1795582378\", \"content\": \"<li class=\"li\" id=\"GUID-165FCFE4-2101-4D94-9757-4D7F919F01E2__ANC_1795582378\"> Subbiah R, Gula LJ, Klein GJ, et al. Workup of the cardiac arrest survivor: for the symposium on sudden cardiac death for progress in cardiovascular diseases. <a class=\"xref extlinkhtml\" href=\"http://www.ncbi.nlm.nih.gov/pubmed/19026854?dopt=Abstract\" target=\"_blank\"><span class=\"data\" property=\"pubmed\" value=\"19026854\"></span>Prog Cardiovasc Dis. 2008 Nov-Dec;51(3):195-203</a></li>\" } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "request",
+      "dataType": "Object",
+      "definition": "The request submitted to the endpoint. May contain query parameters or the request body, depending on the endpoint.",
+      "example": "\"request\": { \"query\": \"heart attack\", \"fields\": [ \"title\" ] }",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "resource",
+      "dataType": "Object",
+      "definition": "Resource content relevant to result.",
+      "example": "\"resource\": { \"id\": \"T906417\", \"title\": \"Suspected Acute Coronary Syndrome\", \"slug\": \"/condition/suspected-acute-coronary-syndrome\", \"links\": [ { \"rel\": \"self\", \"href\": \"https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T906417\" } ] }",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "searchTime",
+      "dataType": "Integer",
+      "definition": "In milliseconds, the time a search took to execute.",
+      "example": "\"searchTime\": 3124",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "sections",
+      "dataType": "Array",
+      "definition": "A collection of sections that together constitute the main content of a resource.",
+      "example": "\"sections\": [ { \"title\": \"Related Summaries\", \"anchor\": \"GUID-317C369A-65B3-4C1A-AD0A-EC0D350AC3F2\", \"content\": \"<html>...</html>\" } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "shortName",
+      "dataType": "String",
+      "definition": "The shortened form of name for a person or institution.  See also [fullName](#fullname).",
+      "example": "\"shortName\": \"Dr. Nici\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "status",
+      "dataType": "String",
+      "definition": "Current status.",
+      "example": "\"status\": \"PUBLISHED\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "submitDate",
+      "dataType": "String",
+      "definition": "Date submitted.",
+      "example": "\"submitDate\": \"2020-10-28T08:54:51.595Z\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "suggestions",
+      "dataType": "Array",
+      "definition": "Collection of suggested resources or searches related to the provided query.",
+      "example": "\"suggestions\": [ { \"completedPhrase\": \"Beckwith-Wiedemann Syndrome\", \"queryMatches\": [ { \"start\": 0, \"length\": 2 } ], \"resource\": { \"id\": \"T116266\", \"slug\": \"/condition/beckwith-wiedemann-syndrome\", \"title\": \"Beckwith-Wiedemann Syndrome\", \"links\": [ { \"rel\": \"self\", \"href\": \"https://ebscois-live.apigee.net/medsapi-dynamed/v1/articles/T116266\" } ] } } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "suggestionType",
+      "dataType": "String",
+      "definition": "In search [suggestions](#suggestions), the type of search suggestion desired or returned.  Example values: title, term.",
+      "example": "\"suggestionType\": \"term\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "supplies",
+      "dataType": "Array",
+      "definition": "Supplies related to a skill.",
+      "example": "\"supplies\": [ \"bandaides\" ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "text",
+      "dataType": "String",
+      "definition": "Unstructured textual content. For structured content, use [content](#content). See also [{prefix}Content](#prefixcontent)",
+      "example": "\"text\": \"hyperoxia associated with increased in-hospital mortality in patients with cardiac arrest.\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "{prefix}Text",
+      "dataType": "String",
+      "definition": "Unstructured textual content. Used instead of [text](#text) when more than one property of an object contains textual content. If no disambiguation is required, use [text](#text). For structured content, use [content](#content).",
+      "example": "\"conflictsText\": \"Dr. Oettgen declares no relevant financial conflicts of interest.\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "timestamp",
+      "dataType": "String",
+      "definition": "Timestamp in UTC that conforms to [ISO 8601](https://www.w3.org/TR/NOTE-datetime).",
+      "example": "\"timestamp\": \"2019-03-20T14:14:45.000Z\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "title",
+      "dataType": "String",
+      "definition": "The title of a given resource.",
+      "example": "\"title\": \"Heart Failure Alternative Treatments\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "toc",
+      "dataType": "Array",
+      "definition": "Table of contents for an article resource, represented as an array of [title](#title) and [anchor](#anchor) pairs, optionally with [children](#children) to indicate hierarchy.",
+      "example": "\"toc\": [ { \"title\": \"General Information\", \"children\": [ { \"title\": \"Description\", \"anchor\": \"DESCRIPTION\" } ], \"anchor\": \"GUID-214F4C1E-0A7E-4738-9110-ADDF6247FE3E\" } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "translationSuccessful",
+      "dataType": "Boolean",
+      "definition": "A field indicating if the language can be translated. Error indicating that the search engine was not able to find the requested language or the language is not supported. If the language can be found but cannot be translated, a successful message will also be returned, but will contains zero results. This field is not set if no translation was needed, or the translation was successful.",
+      "example": "\"translationSuccessful\": false",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "updates",
+      "dataType": "Array",
+      "definition": "Snippets of content describing updates recently made to an article resource.",
+      "example": "\"updates\": [ { \"text\": \"systemic antibiotics may improve exacerbation resolution at end of treatment in non-ICU inpatients with moderate-to-severe exacerbation of COPD (Ann Intern Med 2020 Feb 25 early online)\", \"timestamp\": \"2020-03-09T16:18:54.000Z\", \"practiceChangingUpdate\": false, \"anchor\": \"EFFICACY_ABX__LI_RJS_YCC_ZKB\" } ]",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "username",
+      "dataType": "String",
+      "definition": "User name of relevant person.",
+      "example": "\"username\": \"jsmith\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Terms",
+      "title": "visibility",
+      "dataType": "Object",
+      "definition": "Value indicating whether the parent resource should be hidden from users.  In DynamicHealth, this value is determined by an institution for all users at the institution.",
+      "example": "\"visibility\": { \"hidden\": true, \"lastUpdate\": { \"timestamp\":  \"2020-03-01T23:01:59.908Z\", \"firstName\": \"John\", \"lastName\": \"Smith\", \"username\": \"jsmith\" } }",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Date.Created",
+      "dataType": "String",
+      "definition": "Created date.",
+      "example": "\"DC.Date.Created\": \"2020-10-31\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Date.Revised",
+      "dataType": "String",
+      "definition": "Last revised date.",
+      "example": "\"DC.Date.Revised\": \"2020-10-31\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Format",
+      "dataType": "String",
+      "definition": "The file format, physical medium, or dimensions of the resource.",
+      "example": "\"DC.Format\": \"HTML\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Identifier",
+      "dataType": "String",
+      "definition": "An unambiguous reference to the resource within a given context.",
+      "example": "\"DC.Identifier\": \"GUID-214F4C1E-0A7E-4738-9110-ADDF6247FE3E\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.language",
+      "dataType": "String",
+      "definition": "A language of the resource.",
+      "example": "\"DC.language\": \"en\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Publisher",
+      "dataType": "String",
+      "definition": "An entity responsible for making the resource available.",
+      "example": "\"DC.Publisher\": \"EBSCO Publishing\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.rights.owner",
+      "dataType": "String",
+      "definition": "Rights owner.",
+      "example": "\"DC.rights.owner\": \"(C) Copyright 2020\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Title",
+      "dataType": "String",
+      "definition": "A name given to the resource.",
+      "example": "\"DC.Title\": \"Dehydration, Adult\"",
+      "foundIn": [""],
+      "synonyms": []
+    },
+    {
+      "section": "Dublin Core (DC) Terms",
+      "title": "DC.Type",
+      "dataType": "String",
+      "definition": "The nature or genre of the resource.",
+      "example": "\"DC.Type\": \"topic\"",
+      "foundIn": [""],
+      "synonyms": []
+    }
+  ]
+}

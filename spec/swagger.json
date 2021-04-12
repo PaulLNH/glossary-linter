@@ -1,0 +1,381 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Dynamic Health",
+    "version": "1.0",
+    "contact": {
+      "name": "EBSCO Information Services",
+      "url": "https://connect.ebsco.com/"
+    },
+    "description": "MedsAPI Dynamic Health Endpoints.  The documentation on this site covers all supported functionality of the MedsAPI suite of APIs. Any fields or parameters not represented by the documentation are unsupported and subject to change. Additional optional query parameters and fields in the response could be added in the future as a non breaking change. Any other change that could break the contract would be considered in a future version."
+  },
+  "tags": [
+    {
+      "name": "Search",
+      "description": "Dynamic Health Search Endpoints"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://ebscois-live.apigee.net/medsapi-dynamic-health/v1",
+      "description": "Apigee Live Server"
+    }
+  ],
+  "paths": {
+    "/content/search/suggestions": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "Get a list of search suggestions based on the provided query.",
+        "operationId": "get-search-suggestions",
+        "description": "Get a list of search suggestions either word completions (term) or article completions (title) based on the users access.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "Valid Bearer token to be passed with the request.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "www.dynahealth.com"
+            },
+            "in": "header",
+            "name": "x-forwarded-host",
+            "description": "a valid URL of an EBSCO Health product",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "query",
+            "description": "Word or phrase to search for an article title or a term against.",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "maxItemsPerSuggestionType",
+            "description": "The maximum number of search suggestions to come back for each suggestion type (term or article title)",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/search-suggestions-title-response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - This request requires authentication and none was provided."
+          },
+          "403": {
+            "description": "Forbidden - The authentication credentials do not have access to this resource."
+          },
+          "404": {
+            "description": "Not Found - The server was unable to find a resource matching this request."
+          },
+          "405": {
+            "description": "Method Not Allowed - The server has not implemented the requested HTTP method."
+          },
+          "406": {
+            "description": "Not Acceptable - The server cannot return the requested media type."
+          },
+          "415": {
+            "description": "Unsupported Media Type - The server cannot understand the media type in this request."
+          },
+          "429": {
+            "description": "Too Many Requests - The client has sent too many requests within the given time."
+          },
+          "500": {
+            "description": "Internal Server Error - There was an unexpected error with the server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error-Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerToken": []
+          }
+        ]
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error-Response": {
+        "title": "Error-Response",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Standardized reason phrase for this status code",
+            "example": "Error Name"
+          },
+          "message": {
+            "type": "string",
+            "description": "Details about the error",
+            "example": "Error Description"
+          }
+        }
+      },
+      "search-suggestions-title-response": {
+        "type": "object",
+        "required": ["_metadata", "items"],
+        "properties": {
+          "_metadata": {
+            "type": "object",
+            "description": "Metadata container for data related to the search suggestions query.",
+            "required": ["links"],
+            "properties": {
+              "request": {
+                "type": "object",
+                "description": "Wrapper object to hold the request specific details.",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "example": "heart",
+                    "description": "Word or phrase to search for an article title or a term against."
+                  },
+                  "maxItemsPerSuggestionType": {
+                    "type": "number",
+                    "example": 1,
+                    "description": "The maximum number of search suggestions to come back for each suggestion type (term or article title)."
+                  }
+                }
+              },
+              "links": {
+                "type": "array",
+                "description": "Related links for navigating the API.",
+                "items": {
+                  "type": "object",
+                  "required": ["rel", "href"],
+                  "properties": {
+                    "rel": {
+                      "type": "string",
+                      "example": "self",
+                      "description": "Relation type of the link."
+                    },
+                    "href": {
+                      "type": "string",
+                      "example": "/search/suggestions?query=heart&maxItemsPerSuggestionType=1",
+                      "description": "Absolute URL pointing to the resource."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "description": "Current result list.",
+            "items": {
+              "type": "object",
+              "required": ["suggestionType", "suggestions"],
+              "properties": {
+                "suggestionType": {
+                  "type": "string",
+                  "example": "title",
+                  "description": "The type of suggestion represented."
+                },
+                "suggestions": {
+                  "type": "array",
+                  "description": "Collection of suggested resources or term completions.",
+                  "items": {
+                    "type": "object",
+                    "required": ["completedPhrase", "resource", "links"],
+                    "properties": {
+                      "completedPhrase": {
+                        "type": "string",
+                        "example": "Bed Bug Bites",
+                        "description": "The full text of the matching suggestion."
+                      },
+                      "resource": {
+                        "type": "object",
+                        "description": "The coresponding resource related to the suggestion.",
+                        "required": ["id"],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "T900607",
+                            "description": "Unique identifier for this resource."
+                          },
+                          "slug": {
+                            "type": "string",
+                            "example": "/condition/bed-bug-bites",
+                            "description": "SEO friendly link for accessing this resource's source data directly from an EBSCO product url."
+                          }
+                        }
+                      },
+                      "links": {
+                        "type": "array",
+                        "description": "Relatd links for navigating the API.",
+                        "items": {
+                          "type": "object",
+                          "required": ["rel", "href"],
+                          "properties": {
+                            "rel": {
+                              "type": "string",
+                              "example": "self",
+                              "description": "Relation type of the link."
+                            },
+                            "href": {
+                              "type": "string",
+                              "example": "/content/articles/T900607",
+                              "description": "Absolute URL pointing to the resource."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "search-suggestions-term-response": {
+        "type": "object",
+        "required": ["_metadata", "items"],
+        "properties": {
+          "_metadata": {
+            "type": "object",
+            "description": "Metadata container for data related to the search suggestions query.",
+            "required": ["links"],
+            "properties": {
+              "request": {
+                "type": "object",
+                "description": "Wrapper object to hold the request specific details",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "example": "heart",
+                    "description": "Value to search for a term or an article title against"
+                  },
+                  "maxItemsPerSuggestionType": {
+                    "type": "number",
+                    "example": 1,
+                    "description": "The maximum number of search suggestions to come back for each suggestion type (term or article title)"
+                  }
+                }
+              },
+              "links": {
+                "type": "array",
+                "description": "Related links for navigating the API.",
+                "items": {
+                  "type": "object",
+                  "required": ["rel", "href"],
+                  "properties": {
+                    "rel": {
+                      "type": "string",
+                      "example": "self",
+                      "description": "Relation type of the link."
+                    },
+                    "href": {
+                      "type": "string",
+                      "example": "/search/suggestions?query=heart&maxItemsPerSuggestionType=1",
+                      "description": "Absolute URL pointing to the resource."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "description": "",
+            "items": {
+              "type": "object",
+              "required": ["suggestionType", "suggestions"],
+              "properties": {
+                "suggestionType": {
+                  "type": "string",
+                  "description": "The type of suggestion represented.",
+                  "example": "term"
+                },
+                "suggestions": {
+                  "type": "array",
+                  "description": "Collection of suggested resources or term completions.",
+                  "items": {
+                    "type": "object",
+                    "required": ["completedPhrase", "links"],
+                    "properties": {
+                      "completedPhrase": {
+                        "type": "string",
+                        "description": "The full text of the matching suggestion.",
+                        "example": "Bed Bug Bites"
+                      },
+                      "links": {
+                        "type": "array",
+                        "description": "Relatd links for navigating the API.",
+                        "items": {
+                          "type": "object",
+                          "required": ["rel", "href"],
+                          "properties": {
+                            "rel": {
+                              "type": "string",
+                              "description": "Relation type of the link.",
+                              "example": "self"
+                            },
+                            "href": {
+                              "type": "string",
+                              "description": "Absolute URL pointing to the resource.",
+                              "example": "/search"
+                            },
+                            "method": {
+                              "type": "string",
+                              "description": "The HTPP method to be used with the related link.",
+                              "example": "POST"
+                            },
+                            "body": {
+                              "type": "object",
+                              "description": "The request body for the related link.",
+                              "required": ["query"],
+                              "properties": {
+                                "query": {
+                                  "type": "string",
+                                  "description": "The word or phrase to conduct a search suggestion against.",
+                                  "example": "Bed Bug Bites"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerToken": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
