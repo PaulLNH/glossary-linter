@@ -4,12 +4,18 @@ const glossary = require("./glossary/glossary.json");
 // const spec = require("./spec/swagger.json");
 const spec = require("./spec/DynaMed.json");
 // Import utils
-const { isArray } = require("./utils");
+const { isArray, titleCase } = require("./utils");
 const { HEADER } = require("./constants");
 
 const getGlossaryTerms = async glossary => {
   // Iterate over the glossary terms
-  return glossary.terms.map(({ title, dataType, example }) => { return { title: title || "", dataType: dataType || "", example: example || "" } });
+  return glossary.terms.map(({ title, dataType, example }) => {
+    return {
+      title: title || "",
+      dataType: dataType || "",
+      example: example || ""
+    };
+  });
   // Example Return value:
   // [
   //   {
@@ -25,29 +31,12 @@ const getGlossaryTerms = async glossary => {
   // ]
 };
 
-// const getSpecPathTerms = async spec => {
-//   // Get terms in the path
-//   const endpoints = spec.paths;
-//   const endpointsArr = Object.keys(endpoints);
-//   if (Array.isArray(endpointsArr)) {
-//     return [].concat.apply(
-//       [],
-//       endpointsArr.map(endpoint =>
-//         utils.removeEmptyStringsFromArray(endpoint.split("/"))
-//       )
-//     );
-//   } else {
-//     console.log("Error: The following data is not of type 'Array'.", arr);
-//   }
-// };
-
 // Returns all the spec params as objects
 const getSpecParamTerms = async spec => {
   let paramTerms = [];
   const endpoints = spec.paths;
   // An array of endpoint paths as string eg: ['/articles/{articleId}']
   const endpointsArr = Object.keys(endpoints);
-  console.log(endpointsArr);
   // Null check the array
   if (isArray(endpointsArr)) {
     // Loop through each endpoint
@@ -59,14 +48,47 @@ const getSpecParamTerms = async spec => {
         // Null check the parameters array
         if (isArray(endpoints[endpoint][httpMethod].parameters)) {
           // Get all the terms from the parameters except headers
-          const newParamTerms = endpoints[endpoint][httpMethod].parameters.map(
-            param => param.in.toLowerCase() === HEADER ? null : param.name
-          ).filter(term => term !== null);
+          const newParamTerms = endpoints[endpoint][httpMethod].parameters
+            .map(param =>
+              param.in.toLowerCase() === HEADER
+                ? null
+                : {
+                    section: "", // Comes from path? DynaMed, DynamicHealth?
+                    title: param.name || "", // The term
+                    dataType: titleCase(param.schema.type) || "", // Data Type of the term
+                    definition: param.description || "", // Description of term
+                    example: param.example || "", // Code sample for this term
+                    foundIn: [param.in], // query, body, ect
+                    synonyms: [] // Like terms (this may have to be manual for now?)
+                  }
+            )
+            .filter(term => term !== null);
           paramTerms.push(...newParamTerms);
         }
       });
     });
     return paramTerms;
+    // Example Return Value:
+    // [
+    //   {
+    //     section: "",
+    //     title: "page",
+    //     dataType: "Integer",
+    //     definition: "Next page of items to return.",
+    //     example: "",
+    //     foundIn: ["query"],
+    //     synonyms: []
+    //   },
+    //   {
+    //     section: "",
+    //     title: "pageSize",
+    //     dataType: "Integer",
+    //     definition: "Maximum number of items to return per page.",
+    //     example: "",
+    //     foundIn: ["query"],
+    //     synonyms: []
+    //   }
+    // ];
   } else {
     console.log(
       "Error: The following data is not of type 'Array'.",
@@ -74,7 +96,6 @@ const getSpecParamTerms = async spec => {
     );
   }
 };
-getSpecParamTerms(spec);
 
 const getMatchingTerms = async (glossaryTerms, ...specTerms) => {
   let combinedSpecTerms = [];
@@ -94,7 +115,7 @@ const addNewGlossaryTerm = async termObj => {
     title: "", // The term
     dataType: "", // Data Type of the term
     definition: "", // Description of term
-    example: '', // Code sample for this term
+    example: "", // Code sample for this term
     foundIn: [], // query, body, ect
     synonyms: [] // Like terms (this may have to be manual for now?)
   };
@@ -106,19 +127,12 @@ const start = async () => {
   const glossaryTerms = await getGlossaryTerms(glossary);
   // console.log(glossaryTerms);
 
-  // Get the path terms from the spec
-  // const specPathTerms = await getSpecPathTerms(spec);
-  // console.log(specPathTerms);
-
   // Get the parameter names from the spec
-  // const specParamTerms = await getSpecParamTerms(spec);
-  // console.log(specParamTerms);
+  const specParamTerms = await getSpecParamTerms(spec);
+  console.log(specParamTerms);
 
   // Get the response terms from the spec
   // TODO: Write code for this later - complex
-
-  // 
-
 
   // const matchingTerms = await getMatchingTerms(
   //   glossaryTerms,
