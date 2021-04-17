@@ -1,0 +1,79 @@
+{
+  "sections": [
+    {
+      "title": "Introduction",
+      "definition": "The EIS Clinical Decisions API Glossary is the central hub for terminology used in APIs across the ART. This allows individual teams to create products that have a consistant voice for our customers.\n\nTo contribute to this glossary please see the [Contributing](contribute.md) page."
+    },
+    {
+      "title": "Locations and Identifiers"
+    },
+    {
+      "title": "Collections and Pagination"
+    },
+    {
+      "title": "Hypermedia",
+      "definition": "Clinical Decisions public APIs are hypermedia compliant in accordance with the [hypermedia guidelines](http://api-design-dev-guide.s3-website-us-east-1.amazonaws.com/docs/design-guidelines/#hypermedia) of the EIS API Design Guide."
+    },
+    {
+      "title": "Terms"
+    },
+    {
+      "title": "Uncategorized Terms"
+    }
+  ],
+  "terms": [
+    {
+      "section": "Collections and Pagination",
+      "title": "aggregations",
+      "dataType": "Array",
+      "definition": "An array of total item counts aggregated by the values of a response field.",
+      "example": "\"aggregations\": [\"field\": \"pubTypeId\", \"counts\": { \"Image\": 8, \"condition\": 410, \"drug\": 154, \"lab\": 7 }]",
+      "foundIn": ["Response"],
+      "synonyms": ["buckets"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "slug",
+      "dataType": "String",
+      "definition": "An SEO-friendly string designed to be added to the end of a URL to uniquely identify a resource in a particular context. Can consist of one or more path segments..",
+      "example": "\"slug\": \"/management/heart-failure-alternative-treatments\"",
+      "foundIn": ["Response"],
+      "synonyms": ["link, path, url, uri, segment"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "id",
+      "dataType": "String",
+      "definition": "The unique identifier for a resource.  Since the ID is used in the resource ID segment of the resource path, it must not contain forward slashes. See also [slug](#slug).",
+      "example": "\"anchor\": \"GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA\"",
+      "foundIn": ["Response"],
+      "synonyms": ["an", "identifier"]
+    },
+    {
+      "section": "Collections and Pagination",
+      "title": "_metadata",
+      "dataType": "Object",
+      "definition": "A required property of a collection resource, containing information about the response, including hypermedia [links](#links) and [totalItems](#totalitems), at a minimum.",
+      "example": "\"_metadata\": { \"page\": 1, \"pageSize\": 10 }",
+      "foundIn": ["Response"],
+      "synonyms": []
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "anchor",
+      "dataType": "String",
+      "definition": "An HTML anchor used to identify (and link to) an element within a larger string of HTML. Anchors are represented in the HTML using the @id attribute.",
+      "example": "\"anchor\"': \"GUID-0859557F-9D73-4E90-9AC0-E7FC1D8E94BA\"",
+      "foundIn": ["Response"],
+      "synonyms": ["link"]
+    },
+    {
+      "section": "Locations and Identifiers",
+      "title": "{prefix}Id",
+      "dataType": "String",
+      "definition": "In query parameters only, used to distinguish the ID of the desired resource from those of other resources. For an example see [pubTypeId](#pubtypeid)",
+      "foundIn": ["Query Parameter"],
+      "synonyms": ["id", "an"]
+    }
+  ]
+}

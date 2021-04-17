@@ -1,107 +1,28 @@
+const fs = require("fs");
 // Get the glossary data
-const glossary = require("./glossary/glossary.json");
+// const glossary = require("./input/glossary/glossary.json");
+const glossary = require("./input/glossary/glossary_min.json");
+const GLOSSARY_OUTPUT_LOCATION = `${__dirname}/output`;
+// const rawGlossaryData = fs.readFileSync("./input/glossary/glossary.json");
+// const glossary = JSON.parse(rawGlossaryData);
 // Get the swagger spec
 // const spec = require("./spec/swagger.json");
-const spec = require("./spec/DynaMed.json");
+const spec = require("./input/spec/DynaMed.json");
 // Import utils
-const { isArray, titleCase } = require("./utils");
-const { HEADER } = require("./constants");
+const {
+  isArray,
+  titleCase,
+  parseJSONForWritingToFile,
+} = require("./src/utils");
+const { getGlossaryTerms } = require("./src/controllers").glossary;
+const { getSpecParamTerms } = require("./src/controllers").spec;
+const { GLOSSARY_FILENAME } = require("./src/constants");
 
-const getGlossaryTerms = async glossary => {
-  // Iterate over the glossary terms
-  return glossary.terms.map(({ title, dataType, example }) => {
-    return {
-      title: title || "",
-      dataType: dataType || "",
-      example: example || ""
-    };
-  });
-  // Example Return value:
-  // [
-  //   {
-  //     title: 'timestamp',
-  //     dataType: 'String',
-  //     example: '"timestamp": "2019-03-20T14:14:45.000Z"'
-  //   },
-  //   {
-  //     title: 'title',
-  //     dataType: 'String',
-  //     example: '"title": "Heart Failure Alternative Treatments"'
-  //   },
-  // ]
-};
-
-// Returns all the spec params as objects
-const getSpecParamTerms = async spec => {
-  let paramTerms = [];
-  const endpoints = spec.paths;
-  // An array of endpoint paths as string eg: ['/articles/{articleId}']
-  const endpointsArr = Object.keys(endpoints);
-  // Null check the array
-  if (isArray(endpointsArr)) {
-    // Loop through each endpoint
-    endpointsArr.forEach(endpoint => {
-      // Extract the number of HTTP methods from the endpoint
-      const httpMethodsArr = Object.keys(endpoints[endpoint]);
-      // For each HTTP method
-      httpMethodsArr.forEach(httpMethod => {
-        // Null check the parameters array
-        if (isArray(endpoints[endpoint][httpMethod].parameters)) {
-          // Get all the terms from the parameters except headers
-          const newParamTerms = endpoints[endpoint][httpMethod].parameters
-            .map(param =>
-              param.in.toLowerCase() === HEADER
-                ? null
-                : {
-                    section: "", // Comes from path? DynaMed, DynamicHealth?
-                    title: param.name || "", // The term
-                    dataType: titleCase(param.schema.type) || "", // Data Type of the term
-                    definition: param.description || "", // Description of term
-                    example: param.example || "", // Code sample for this term
-                    foundIn: [param.in], // query, body, ect
-                    synonyms: [] // Like terms (this may have to be manual for now?)
-                  }
-            )
-            .filter(term => term !== null);
-          paramTerms.push(...newParamTerms);
-        }
-      });
-    });
-    return paramTerms;
-    // Example Return Value:
-    // [
-    //   {
-    //     section: "",
-    //     title: "page",
-    //     dataType: "Integer",
-    //     definition: "Next page of items to return.",
-    //     example: "",
-    //     foundIn: ["query"],
-    //     synonyms: []
-    //   },
-    //   {
-    //     section: "",
-    //     title: "pageSize",
-    //     dataType: "Integer",
-    //     definition: "Maximum number of items to return per page.",
-    //     example: "",
-    //     foundIn: ["query"],
-    //     synonyms: []
-    //   }
-    // ];
-  } else {
-    console.log(
-      "Error: The following data is not of type 'Array'.",
-      endpointsArr
-    );
-  }
-};
-
-const getMatchingTerms = async (glossaryTerms, ...specTerms) => {
+const compareSpecTermsAgainstGlossary = async (specTerms, glossaryTerms) => {
   let combinedSpecTerms = [];
   let matchingTerms = [];
-  specTerms.forEach(termArr => combinedSpecTerms.push(...termArr));
-  combinedSpecTerms.forEach(term => {
+  specTerms.forEach((termArr) => combinedSpecTerms.push(...termArr));
+  combinedSpecTerms.forEach((term) => {
     if (glossaryTerms.indexOf(term) !== -1) {
       matchingTerms.push(glossaryTerms[glossaryTerms.indexOf(term)]);
     }
@@ -109,22 +30,42 @@ const getMatchingTerms = async (glossaryTerms, ...specTerms) => {
   return matchingTerms;
 };
 
-const addNewGlossaryTerm = async termObj => {
+// TODO: Temporary solution for this is to output a new glossary.json file in the "output" folder.
+const addNewTermToGlossary = async (termObj, glossary) => {
+  const { section, title, dataType, definition, example, foundIn } = termObj;
+  // console.log(glossary, "Updated Glossary BEFORE");
   const termModel = {
-    section: "", // Comes from path? DynaMed, DynamicHealth?
-    title: "", // The term
-    dataType: "", // Data Type of the term
-    definition: "", // Description of term
-    example: "", // Code sample for this term
-    foundIn: [], // query, body, ect
-    synonyms: [] // Like terms (this may have to be manual for now?)
+    section, // Comes from path? DynaMed, DynamicHealth?
+    title, // The term
+    dataType, // Data Type of the term
+    definition, // Description of term
+    example, // Code sample for this term
+    foundIn: [...foundIn] || [], // query, body, ect
+    synonyms: [], // Like terms (this may have to be manual for now?)
   };
-  return termModel;
+  glossary.terms.push(termModel);
+  // updatedGlossary = getUpdatedGlossary();
+  // console.log(glossary, "Updated Glossary AFTER");
+  console.log(
+    `${GLOSSARY_OUTPUT_LOCATION}/${GLOSSARY_FILENAME}`,
+    "GLOSSARY_OUTPUT_LOCATION"
+  );
+  fs.writeFile(
+    `${GLOSSARY_OUTPUT_LOCATION}/${GLOSSARY_FILENAME}`,
+    parseJSONForWritingToFile(glossary),
+    function (err) {
+      if (err) throw err;
+      console.log(
+        `Glossary has been updated to include "${termObj.title}" and can be found at: ${GLOSSARY_OUTPUT_LOCATION}/${GLOSSARY_FILENAME}`
+      );
+    }
+  );
+  return glossary;
 };
 
 const start = async () => {
   // First get all glossary terms
-  const glossaryTerms = await getGlossaryTerms(glossary);
+  // const glossaryTerms = await getGlossaryTerms(glossary);
   // console.log(glossaryTerms);
 
   // Get the parameter names from the spec
@@ -134,12 +75,19 @@ const start = async () => {
   // Get the response terms from the spec
   // TODO: Write code for this later - complex
 
-  // const matchingTerms = await getMatchingTerms(
-  //   glossaryTerms,
-  //   specPathTerms,
-  //   specParamTerms
-  // );
-  // console.log(matchingTerms, "Matching Terms");
+  // Add a term to the glossary
+  addNewTermToGlossary(
+    {
+      section: "DynaMed",
+      title: "Paul Laird",
+      dataType: "String",
+      definition: "The Author of this awesome tool.",
+      example: '"paul": "Laird"',
+      foundIn: ["query"],
+      synonyms: [],
+    },
+    glossary
+  );
 };
 
 start();
